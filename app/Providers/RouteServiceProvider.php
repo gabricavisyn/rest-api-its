@@ -35,6 +35,15 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
+
+            $itsRoutes = collect(glob(base_path('routes')."/its_*.php"));
+            foreach ($itsRoutes->toArray() as $file) {
+                $cognome = basename($file, '.php');
+                $cognome = str_replace("_","-",$cognome);
+                Route::middleware('api')
+                    ->prefix('api/'.$cognome)
+                    ->group($file);
+            }
         });
     }
 
